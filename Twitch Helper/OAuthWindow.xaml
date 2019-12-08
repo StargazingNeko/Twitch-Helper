@@ -1,0 +1,16 @@
+﻿<Window x:Class="Twitch_Helper.OAuthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Twitch_Helper"
+        mc:Ignorable="d"
+        Title="OAuth" Height="100" Width="350"
+        WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="Manual" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <TextBox x:Name="OAuthBox" HorizontalAlignment="Center" Height="20" Margin="0,0,0,50" Text="OAuth" TextAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Center" Width="250" TextChanged="OAuthBox_TextChanged" MouseDoubleClick="OAuthBox_MouseDoubleClick"/>
+        <TextBox x:Name="PWDBox" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" Text="Password" TextAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Center" Width="250" TextChanged="PWDBox_TextChanged" MouseDoubleClick="PWDBox_MouseDoubleClick" ToolTip="Enter a password to encrypt your OAuth key. Highly recommended!"/>
+        <Button x:Name="SaveButton" Content="   Save   " HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Center" Click="SaveButton_Click"/>
+        
+    </Grid>
+</Window>
