@@ -36,29 +36,20 @@ namespace Twitch_Helper
 
             if (File.Exists("config.json"))
             {
-                try
-                {
-                    FollowerGoal.Text = _JsonHandler.Read("config.json", true)["FollowerGoal"].ToString();
-                }
-                catch (Exception ex)
-                {
-
-                }
+                    FollowerGoal.Text = (string)_JsonHandler?.Read("config.json", true)?["FollowerGoal"] ?? "0";
             }
 
-
-
-            FollowerTimer.Tick += (o, e) => { CurrentFollowerCount.Text = _TwitchHandler.PullFollowerCount().ToString(); CompareFollowerCount(); };
+            FollowerTimer.Tick += (o, e) => { CurrentFollowerCount.Text = _TwitchHandler.GetFollowerCount().ToString(); CompareFollowerCount(); };
             FollowerTimer.IsEnabled = true;
         }
 
         private void CompareFollowerCount()
         {
-            FollowerTimer.Interval = TimeSpan.FromSeconds(15);
+            FollowerTimer.Interval = TimeSpan.FromSeconds(5);
             string Followers = $"{CurrentFollowerCount.Text}/{FollowerGoal.Text}";
             if (!File.Exists("Follower Goal.txt"))
             {
-                File.WriteAllText("Follower Goal.txt",$"{Followers}");
+                File.WriteAllText("Follower Goal.txt", $"{Followers}");
             }
             else if (Followers != File.ReadAllText("Follower Goal.txt"))
             {
@@ -77,7 +68,7 @@ namespace Twitch_Helper
         private void WriteToFile()
         {
             File.WriteAllText("Follower Goal.txt", CurrentFollowerCount.Text + Slash.Content + FollowerGoal.Text);
-            _JsonHandler.Write("FollowerGoal", FollowerGoal.Text, "config.json");
+            _JsonHandler.Write("FollowerGoal", FollowerGoal.Text ?? "0", "config.json");
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

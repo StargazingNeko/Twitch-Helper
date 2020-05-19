@@ -8,9 +8,8 @@
         Title="OAuth" Height="100" Width="350"
         WindowStyle="None" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="Manual" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="OAuthBox" HorizontalAlignment="Center" Height="20" Margin="0,0,0,50" Text="OAuth" TextAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Center" Width="250" TextChanged="OAuthBox_TextChanged" MouseDoubleClick="OAuthBox_MouseDoubleClick"/>
-        <TextBox x:Name="PWDBox" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" Text="Password" TextAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Center" Width="250" TextChanged="PWDBox_TextChanged" MouseDoubleClick="PWDBox_MouseDoubleClick" ToolTip="Enter a password to encrypt your OAuth key. Highly recommended!"/>
+        <Label x:Name="OAuthUrlLabel" Content="Click here to get OAuth token" Margin="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="#FF1700FF" MouseDoubleClick="OAuthUrlLabel_MouseDoubleClick"/>
+        <TextBox x:Name="OAuthBox" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" Text="OAuth Token" TextAlignment="Center" TextWrapping="NoWrap" VerticalAlignment="Center" Width="250" TextChanged="OAuthBox_TextChanged" MouseDoubleClick="OAuthBox_MouseDoubleClick"/>
         <Button x:Name="SaveButton" Content="   Save   " HorizontalAlignment="Center" Margin="0,60,0,0" VerticalAlignment="Center" Click="SaveButton_Click"/>
-        
     </Grid>
 </Window>

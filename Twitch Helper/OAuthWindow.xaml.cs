@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,25 +13,25 @@ namespace Twitch_Helper
     /// </summary>
     public partial class OAuthWindow : Window
     {
-        private string Pass;
         private string OAuth { get; set; } = "";
         private readonly JsonHandler _JsonHandler = new JsonHandler();
+        private readonly TwitchHandler _TwitchHandler = new TwitchHandler();
 
         public OAuthWindow()
         {
             try
             {
-                MouseLeftButtonDown += ApiKeyWindow_MouseLeftButtonDown;
+                MouseLeftButtonDown += OAuthTokenWindow_MouseLeftButtonDown;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show(ex.ToString(), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 File.WriteAllText("OAuthWindow.log", ex.ToString());
             }
             
         }
 
-        private void ApiKeyWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void OAuthTokenWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
@@ -41,7 +42,7 @@ namespace Twitch_Helper
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show(ex.ToString(), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 File.WriteAllText("OAuthWindow.log", ex.ToString());
             }
 
@@ -55,20 +56,7 @@ namespace Twitch_Helper
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
-                File.WriteAllText("OAuthWindow.log", ex.ToString());
-            }
-        }
-
-        private void PWDBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            try
-            {
-                Pass = PWDBox.Text;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show(ex.ToString(), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 File.WriteAllText("OAuthWindow.log", ex.ToString());
             }
         }
@@ -81,20 +69,7 @@ namespace Twitch_Helper
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
-                File.WriteAllText("OAuthWindow.log", ex.ToString());
-            }
-        }
-
-        private void PWDBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            try
-            {
-                PWDBox.Text = "";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show(ex.ToString(), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 File.WriteAllText("OAuthWindow.log", ex.ToString());
             }
         }
@@ -103,23 +78,68 @@ namespace Twitch_Helper
         {
             try
             {
-                this.Hide();
-                foreach (Window window in Application.Current.Windows)
+                OAuth = OAuthBox.Text;
+
+                if (!string.IsNullOrEmpty(OAuth) && !OAuth.ToLower().Contains("oauth"))
                 {
-                    if (window.GetType() == typeof(MainWindow))
+                    _JsonHandler.Write("OAuthToken", OAuth, "config.json");
+                    _TwitchHandler.SetOAuthToken(OAuth);
+
+                    string Username = _TwitchHandler.GetUsername(OAuth);
+                    string UserId = _TwitchHandler.GetUserId(OAuth);
+
+                    if (!string.IsNullOrEmpty(Username))
                     {
-                        (window as MainWindow).FollowerGoal.IsEnabled = true;
+                        _JsonHandler.Write("Username", Username, "config.json");
                     }
+                    else
+                    {
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(UserId))
+                    {
+                        _JsonHandler.Write("UserId", UserId, "config.json");
+                    }
+                    else
+                    {
+                        return;
+                    }
+
+                    this.Hide();
+                    foreach (Window window in Application.Current.Windows)
+                    {
+                        if (window.GetType() == typeof(MainWindow))
+                        {
+                            (window as MainWindow).FollowerGoal.IsEnabled = true;
+                        }
+                    }
+
+                    FollowerGoalWindow.FollowerTimer.IsEnabled = true;
+                    FollowerGoalWindow.FollowerTimer.Start();
                 }
-                _JsonHandler.Write("OAuth", OAuth, "config.json");
-                FollowerGoalWindow.FollowerTimer.IsEnabled = true;
-                FollowerGoalWindow.FollowerTimer.Start();
+                else
+                {
+                    MessageBox.Show("You must set an OAuth token!", "Please set an OAuth token!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Error!");
+                MessageBox.Show(ex.ToString(), "Error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 File.WriteAllText("OAuthWindow.log", ex.ToString());
             }
+        }
+
+        private void OAuthUrlLabel_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = $"https://id.twitch.tv/oauth2/authorize?client_id={TwitchHandler.ClientID}&redirect_uri=https://www.entropicgamers.com/TTVHelper/oauth&scope=channel:read:subscriptions&response_type=token",
+                UseShellExecute = true
+            };
+            
+            Process.Start(psi);
         }
     }
 }
