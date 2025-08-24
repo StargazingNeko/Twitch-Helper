@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Twitch_Helper</RootNamespace>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
@@ -19,6 +19,9 @@
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <Version>1.0.1</Version>
+    <Authors>StargazingNeko</Authors>
+    <Description>An app that writes information to text files for programs like Open Broadcaster Software (OBS) and XSplit to display on Twitch streams.</Description>
   </PropertyGroup>
   
   <ItemGroup>

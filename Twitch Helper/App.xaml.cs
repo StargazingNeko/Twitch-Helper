@@ -16,14 +16,6 @@ namespace Twitch_Helper
     {
         public App()
         {
-            /*if(File.Exists("config.json"))
-            {
-                StartupUri = new Uri("/Twitch Helper;component/PasswordWindow.xaml", UriKind.Relative);
-            }
-            else
-            {
-                StartupUri = new Uri("/Twitch Helper;component/MainWindow.xaml", UriKind.Relative);
-            }*/
             StartupUri = new Uri("/Twitch Helper;component/MainWindow.xaml", UriKind.Relative);
         }
 
